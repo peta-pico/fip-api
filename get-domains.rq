@@ -1,0 +1,60 @@
+#+ summary: Get list of domains
+#+ method: GET
+#+ pagination: 1000
+#+ endpoint_in_url: False
+
+prefix np: <http://www.nanopub.org/nschema#>
+prefix npa: <http://purl.org/nanopub/admin/>
+prefix npx: <http://purl.org/nanopub/x/>
+prefix xsd: <http://www.w3.org/2001/XMLSchema#>
+prefix dct: <http://purl.org/dc/terms/>
+prefix fip: <https://w3id.org/fair/fip/terms/>
+
+prefix showcommunities: <?api=peta-pico/fip-api&op=/get-communities&autosubmit=on&param_domain=>
+
+select distinct ?domain ?domainLabel ?show_communities ?show_communitiesLabel where {
+  graph npa:graph {
+    ?np npa:hasHeadGraph ?h .
+    ?np npa:hasValidSignatureForPublicKey ?pubkey .
+  }
+  graph ?h {
+    ?np np:hasAssertion ?a .
+    ?np np:hasPublicationInfo ?i.
+  }
+  graph ?a {
+    ?community a fip:FAIR-Implementation-Community .
+    ?community fip:has-research-domain ?domain .
+  }
+  ?domain rdfs:label ?domainLabel .
+
+  bind(replace(str(?community), '^.*[#/]([^#/]+)$', '$1') as ?communityLabel)
+
+  filter not exists {
+    graph npa:graph {
+      ?newversion npa:hasHeadGraph ?nh .
+      ?newversion npa:hasValidSignatureForPublicKey ?pubkey .
+    }
+    graph ?nh {
+      ?newversion np:hasPublicationInfo ?ni .
+    }
+    graph ?ni {
+      ?newversion npx:supersedes ?np .
+    }
+  }
+  filter not exists {
+    graph npa:graph {
+      ?retraction npa:hasHeadGraph ?rh .
+      ?retraction npa:hasValidSignatureForPublicKey ?pubkey .
+    }
+    graph ?rh {
+      ?retraction np:hasAssertion ?ra .
+    }
+    graph ?ra {
+      ?somebody npx:retracts ?np .
+    }
+  }
+
+  bind(uri(concat(showcommunities:, encode_for_uri(?domain))) as ?show_communities)
+  bind('show communities' as ?show_communitiesLabel)
+}
+order by asc(?domainLabel)
