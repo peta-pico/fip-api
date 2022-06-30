@@ -9,7 +9,7 @@ prefix npx: <http://purl.org/nanopub/x/>
 prefix xsd: <http://www.w3.org/2001/XMLSchema#>
 prefix dct: <http://purl.org/dc/terms/>
 
-select distinct ?community ?label ?np ?date ?pubkey ?retraction ?newversion where {
+select distinct ?community ?label ?np ?date ?pubkey where {
   graph npa:graph {
     ?np npa:hasHeadGraph ?h .
     ?np dct:created ?date .
@@ -23,7 +23,7 @@ select distinct ?community ?label ?np ?date ?pubkey ?retraction ?newversion wher
     ?community a <https://w3id.org/fair/fip/terms/FAIR-Implementation-Community> .
     ?community rdfs:label ?label .
   }
-  optional {
+  filter not exists {
     graph npa:graph {
       ?newversion npa:hasHeadGraph ?nh .
       ?newversion npa:hasValidSignatureForPublicKey ?pubkey .
@@ -35,7 +35,7 @@ select distinct ?community ?label ?np ?date ?pubkey ?retraction ?newversion wher
       ?newversion npx:supersedes ?np .
     }
   }
-  optional {
+  filter not exists {
     graph npa:graph {
       ?retraction npa:hasHeadGraph ?rh .
       ?retraction npa:hasValidSignatureForPublicKey ?pubkey .
