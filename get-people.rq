@@ -10,8 +10,6 @@ prefix xsd: <http://www.w3.org/2001/XMLSchema#>
 prefix dct: <http://purl.org/dc/terms/>
 prefix fip: <https://w3id.org/fair/fip/terms/>
 
-prefix showcommunities: <?api=peta-pico/fip-api&op=/get-communities&autosubmit=on&param_domain=>
-
 select distinct ?person ?personLabel where {
   graph npa:graph {
     ?np npa:hasHeadGraph ?h .
@@ -24,17 +22,19 @@ select distinct ?person ?personLabel where {
   }
   graph ?a {
     ?community a fip:FAIR-Implementation-Community .
-    ?community fip:has-research-domain ?domain .
   }
-  {
+
+#  {
     graph ?p {
       ?a dct:creator ?person .
     }
-  } union {
-    graph ?i {
-      ?np dct:creator ?person .
-    }
-  }
+#  }
+#  union {
+#    graph ?i {
+#      ?np dct:creator ?person .
+#    }
+#  }
+
   optional {
     ?person foaf:name ?personLabel .
   }
