@@ -12,7 +12,7 @@ prefix fip: <https://w3id.org/fair/fip/terms/>
 
 prefix showcommunities: <?api=peta-pico/fip-api&op=/get-communities&autosubmit=on&param_domain=>
 
-select distinct ?domain ?domainLabel ?show_communities ?show_communitiesLabel where {
+select distinct ?domain ?domainLabel (count(distinct ?community) as ?community_count) ?show_communities ?show_communitiesLabel where {
   graph npa:graph {
     ?np npa:hasHeadGraph ?h .
     ?np npa:hasValidSignatureForPublicKey ?pubkey .
@@ -57,4 +57,5 @@ select distinct ?domain ?domainLabel ?show_communities ?show_communitiesLabel wh
   bind(uri(concat(showcommunities:, encode_for_uri(?domain))) as ?show_communities)
   bind('show communities' as ?show_communitiesLabel)
 }
+group by ?domain ?domainLabel ?show_communities ?show_communitiesLabel
 order by asc(?domainLabel)
