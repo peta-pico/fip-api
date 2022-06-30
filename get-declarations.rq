@@ -10,7 +10,7 @@ prefix npa: <http://purl.org/nanopub/admin/>
 prefix npx: <http://purl.org/nanopub/x/>
 prefix np: <http://www.nanopub.org/nschema#>
 
-select distinct ?community ?communityLabel ?question ?questionLabel ?sort ?sortLabel ?resource ?resourceLabel ?rel ?resourcetype where {
+select distinct ?community ?communityLabel ?question ?questionLabel ?sort ?resource ?resourceLabel ?rel ?resourcetype where {
   ?np np:hasAssertion ?assertion .
   graph npa:graph { ?np dct:created ?date . }
   graph ?assertion {
@@ -34,5 +34,4 @@ select distinct ?community ?communityLabel ?question ?questionLabel ?sort ?sortL
   bind (replace(str(?community), ".*#", "") as ?communityLabel)
   bind (replace(str(?question), "^.*-([^-MD]+(-[MD]+)?)$", "$1") as ?questionLabel)
   bind (concat(replace(?questionLabel, "F|M", "0"), "x") as ?sort)
-  bind ("" as ?sortLabel)
 } order by ?sort ?communityLabel
