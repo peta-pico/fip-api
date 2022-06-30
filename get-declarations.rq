@@ -16,8 +16,9 @@ select distinct ?community ?communityLabel ?question ?questionLabel ?sort ?resou
   graph ?assertion {
     ?decl a fip:FIP-Declaration ;
       fip:refers-to-question ?question ;
-      fip:declared-by ?community ;
+      fip:declared-by ?__community_iri ;
       ?rel ?resource .
+      bind(?__community_iri as ?community)
   }
   ?community fip:has-research-domain ?__domain_iri .
   values ?rel {

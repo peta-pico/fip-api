@@ -10,7 +10,9 @@ prefix xsd: <http://www.w3.org/2001/XMLSchema#>
 prefix dct: <http://purl.org/dc/terms/>
 prefix fip: <https://w3id.org/fair/fip/terms/>
 
-select distinct ?community ?communityLabel ?name ?np ?npLabel ?date where {
+prefix showdeclarations: <?api=peta-pico/fip-api&op=/get-declarations&autosubmit=on&param_domain=>
+
+select distinct ?community ?communityLabel ?name ?np ?npLabel ?date ?show_declarations ?show_declarationsLabel where {
   graph npa:graph {
     ?np npa:hasHeadGraph ?h .
     ?np dct:created ?date .
@@ -53,5 +55,8 @@ select distinct ?community ?communityLabel ?name ?np ?npLabel ?date where {
       ?somebody npx:retracts ?np .
     }
   }
+
+  bind(uri(concat(showdeclarations:, ?community)) as ?show_declarations)
+  bind('show declarations' as ?show_declarationsLabel)
 }
 order by asc(?name)
