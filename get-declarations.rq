@@ -19,6 +19,7 @@ select distinct ?community ?communityLabel ?question ?questionLabel ?sort ?resou
       fip:declared-by ?community ;
       ?rel ?resource .
   }
+  ?community fip:has-research-domain ?__domain_iri .
   values ?rel {
     fip:declares-current-use-of fip:declares-planned-use-of fip:declares-planned-replacement-of
     # unofficial:
