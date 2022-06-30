@@ -1,0 +1,50 @@
+#+ summary: Get list of FAIR Implementation Communities
+#+ method: GET
+#+ pagination: 1000
+#+ endpoint_in_url: False
+
+prefix np: <http://www.nanopub.org/nschema#>
+prefix npa: <http://purl.org/nanopub/admin/>
+prefix npx: <http://purl.org/nanopub/x/>
+prefix xsd: <http://www.w3.org/2001/XMLSchema#>
+prefix dct: <http://purl.org/dc/terms/>
+
+select distinct ?community ?label ?np ?date ?pubkey ?retraction ?newversion where {
+  graph npa:graph {
+    ?np npa:hasHeadGraph ?h .
+    ?np dct:created ?date .
+    ?np npa:hasValidSignatureForPublicKey ?pubkey .
+  }
+  graph ?h {
+    ?np np:hasAssertion ?a .
+    ?np np:hasPublicationInfo ?i.
+  }
+  graph ?a {
+    ?community a <https://w3id.org/fair/fip/terms/FAIR-Implementation-Community> .
+    ?community rdfs:label ?label .
+  }
+  optional {
+    graph npa:graph {
+      ?newversion npa:hasHeadGraph ?nh .
+      ?newversion npa:hasValidSignatureForPublicKey ?pubkey .
+    }
+    graph ?nh {
+      ?newversion np:hasPublicationInfo ?ni .
+    }
+    graph ?ni {
+      ?newversion npx:supersedes ?np .
+    }
+  }
+  optional {
+    graph npa:graph {
+      ?retraction npa:hasHeadGraph ?rh .
+      ?retraction npa:hasValidSignatureForPublicKey ?pubkey .
+    }
+    graph ?rh {
+      ?retraction np:hasAssertion ?ra .
+    }
+    graph ?ra {
+      ?somebody npx:retracts ?np .
+    }
+  }
+}
