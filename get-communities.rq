@@ -8,6 +8,7 @@ prefix npa: <http://purl.org/nanopub/admin/>
 prefix npx: <http://purl.org/nanopub/x/>
 prefix xsd: <http://www.w3.org/2001/XMLSchema#>
 prefix dct: <http://purl.org/dc/terms/>
+prefix fip: <https://w3id.org/fair/fip/terms/>
 
 select distinct ?community ?communityLabel ?name ?np ?npLabel ?date where {
   graph npa:graph {
@@ -20,7 +21,8 @@ select distinct ?community ?communityLabel ?name ?np ?npLabel ?date where {
     ?np np:hasPublicationInfo ?i.
   }
   graph ?a {
-    ?community a <https://w3id.org/fair/fip/terms/FAIR-Implementation-Community> .
+    ?community a fip:FAIR-Implementation-Community .
+    ?community fip:has-research-domain ?__domain_iri .
     ?community rdfs:label ?name .
   }
   
