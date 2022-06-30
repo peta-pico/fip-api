@@ -1,0 +1,35 @@
+#+ summary: Get list of FAIR Implementation Profile declarations
+#+ method: GET
+#+ pagination: 1000
+#+ endpoint_in_url: False
+
+prefix fip: <https://w3id.org/fair/fip/terms/>
+prefix dct: <http://purl.org/dc/terms/>
+prefix dce: <http://purl.org/dc/elements/1.1/>
+prefix npa: <http://purl.org/nanopub/admin/>
+prefix npx: <http://purl.org/nanopub/x/>
+prefix np: <http://www.nanopub.org/nschema#>
+
+select distinct ?community ?communityLabel ?question ?questionLabel ?sort ?resource ?resourceLabel ?rel ?resourcetype ?date where {
+  ?np np:hasAssertion ?assertion .
+  graph npa:graph { ?np dct:created ?date . }
+  graph ?assertion {
+    ?decl a fip:FIP-Declaration ;
+      fip:refers-to-question ?question ;
+      fip:declared-by ?community ;
+      ?rel ?resource .
+  }
+  values ?rel {
+    fip:declares-current-use-of fip:declares-planned-use-of fip:declares-planned-replacement-of
+    # unofficial:
+    fip:declares-replacement-from fip:declares-replacement-to
+  }
+  optional {?resource rdfs:label ?resourceLabel}
+  optional {
+    values ?resourcetype { fip:Available-FAIR-Enabling-Resource fip:FAIR-Enabling-Resource-to-be-Developed }
+    ?resource a ?resourcetype
+  }
+  bind (replace(str(?community), ".*#", "") as ?communityLabel)
+  bind (replace(str(?question), "^.*-([^-MD]+(-[MD]+)?)$", "$1") as ?questionLabel)
+  bind (concat(replace(?questionLabel, "F|M", "0"), "x") as ?sort)
+} order by ?sort ?communityLabel
