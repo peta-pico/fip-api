@@ -10,7 +10,7 @@ prefix npa: <http://purl.org/nanopub/admin/>
 prefix npx: <http://purl.org/nanopub/x/>
 prefix np: <http://www.nanopub.org/nschema#>
 
-select distinct ?community ?communityLabel ?question ?questionLabel ?sort ?resource ?resourceLabel ?rel ?resourcetype where {
+select distinct ?community ?communityLabel ?question ?questionLabel ?sort ?sortLabel ?resource ?resourceLabel ?rel ?resourcetype where {
   ?np np:hasAssertion ?assertion .
   graph npa:graph { ?np dct:created ?date . }
   graph ?assertion {
