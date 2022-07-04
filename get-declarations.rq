@@ -17,7 +17,7 @@ select distinct ?community ?communityLabel ?question ?questionLabel ?sort ?resou
     ?decl a fip:FIP-Declaration ;
       fip:refers-to-question ?question ;
       fip:declared-by ?__community_iri ;
-      ?rel ?resource_iri .
+      ?rel ?__resource_iri .
       bind(?__community_iri as ?community)
       bind(?__resource_iri as ?resource)
   }
