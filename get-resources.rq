@@ -10,7 +10,9 @@ prefix npa: <http://purl.org/nanopub/admin/>
 prefix npx: <http://purl.org/nanopub/x/>
 prefix np: <http://www.nanopub.org/nschema#>
 
-select distinct ?resource ?resourceLabel ?resourcetype (count(distinct ?community) as ?community_count) (count(distinct ?domain) as ?domain_count) where {
+prefix showdeclarations: <?api=peta-pico/fip-api&op=/get-declarations&autosubmit=on&param_resource=>
+
+select distinct ?resource ?resourceLabel ?resourcetype (count(distinct ?community) as ?community_count) ?show_declarations ?show_declarationsLabel where {
   ?np np:hasAssertion ?assertion .
   graph npa:graph { ?np dct:created ?date . }
   graph ?assertion {
@@ -19,7 +21,6 @@ select distinct ?resource ?resourceLabel ?resourcetype (count(distinct ?communit
       fip:declared-by ?community ;
       ?rel ?resource .
   }
-  ?community fip:has-research-domain ?domain .
   values ?rel {
     fip:declares-current-use-of fip:declares-planned-use-of fip:declares-planned-replacement-of fip:declares-planned-development-of
     # unofficial:
@@ -30,6 +31,9 @@ select distinct ?resource ?resourceLabel ?resourcetype (count(distinct ?communit
     values ?resourcetype { fip:Available-FAIR-Enabling-Resource fip:FAIR-Enabling-Resource-to-be-Developed }
     ?resource a ?resourcetype
   }
+
+  bind(uri(concat(showdeclarations:, encode_for_uri(?resource))) as ?show_declarations)
+  bind('show declarations' as ?show_declarationsLabel)
 }
-group by ?resource ?resourceLabel ?resourcetype
+group by ?resource ?resourceLabel ?resourcetype ?show_declarations ?show_declarationsLabel
 order by ?resourceLabel
