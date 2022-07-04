@@ -34,4 +34,5 @@ select distinct ?community ?communityLabel ?question ?questionLabel ?sort ?resou
   bind (replace(str(?community), ".*#", "") as ?communityLabel)
   bind (replace(str(?question), "^.*-([^-MD]+(-[MD]+)?)$", "$1") as ?questionLabel)
   bind (concat(replace(?questionLabel, "F|M", "0"), "x") as ?sort)
+  bind (" " as sortLabel)
 } order by ?sort ?communityLabel
