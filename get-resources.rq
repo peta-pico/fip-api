@@ -18,10 +18,13 @@ select distinct ?resource ?resourceLabel ?resourcetype (count(distinct ?communit
   graph ?assertion {
     ?decl a fip:FIP-Declaration ;
       fip:refers-to-question ?question ;
-      fip:declared-by ?community ;
+      fip:declared-by ?__community_iri ;
       ?rel ?resource .
       filter (strstarts(str(?question), str(fip:)))
   }
+  bind(?__community_iri as ?community)
+  ?community fip:has-research-domain ?__domain_iri .
+  bind(?__domain_iri as ?domain)
   values ?rel {
     fip:declares-current-use-of fip:declares-planned-use-of fip:declares-planned-replacement-of fip:declares-planned-development-of
     # unofficial:
