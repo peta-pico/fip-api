@@ -10,7 +10,7 @@ prefix npa: <http://purl.org/nanopub/admin/>
 prefix npx: <http://purl.org/nanopub/x/>
 prefix np: <http://www.nanopub.org/nschema#>
 
-select distinct ?resource ?resourceLabel ?resourcetype (count(distinct ?community) as ?community_count) where {
+select distinct ?resource ?resourceLabel ?resourcetype (count(distinct ?community) as ?community_count) (count(distinct ?domain) as ?domain_count) where {
   ?np np:hasAssertion ?assertion .
   graph npa:graph { ?np dct:created ?date . }
   graph ?assertion {
@@ -19,7 +19,7 @@ select distinct ?resource ?resourceLabel ?resourcetype (count(distinct ?communit
       fip:declared-by ?community ;
       ?rel ?resource .
   }
-  ?community fip:has-research-domain ?__domain_iri .
+  ?community fip:has-research-domain ?domain .
   values ?rel {
     fip:declares-current-use-of fip:declares-planned-use-of fip:declares-planned-replacement-of fip:declares-planned-development-of
     # unofficial:
