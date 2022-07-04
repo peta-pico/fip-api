@@ -20,6 +20,7 @@ select distinct ?community ?communityLabel ?question ?questionLabel ?sort ?resou
       ?rel ?__resource_iri .
       bind(?__community_iri as ?community)
       bind(?__resource_iri as ?resource)
+      filter (strstarts(str(?question), str(fip:)))
   }
   ?community fip:has-research-domain ?__domain_iri .
   values ?rel {

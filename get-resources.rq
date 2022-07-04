@@ -20,6 +20,7 @@ select distinct ?resource ?resourceLabel ?resourcetype (count(distinct ?communit
       fip:refers-to-question ?question ;
       fip:declared-by ?community ;
       ?rel ?resource .
+      filter (strstarts(str(?question), str(fip:)))
   }
   values ?rel {
     fip:declares-current-use-of fip:declares-planned-use-of fip:declares-planned-replacement-of fip:declares-planned-development-of
