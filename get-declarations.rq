@@ -10,7 +10,7 @@ prefix npa: <http://purl.org/nanopub/admin/>
 prefix npx: <http://purl.org/nanopub/x/>
 prefix np: <http://www.nanopub.org/nschema#>
 
-select distinct ?community ?communityLabel ?question ?questionLabel ?sort ?resource ?resourceLabel ?rel ?resourcetype ?np where {
+select distinct ?community ?communityLabel ?question ?questionLabel ?sort ?resource ?resourceLabel ?rel ?resourcetype ?np ?npLabel where {
   ?np np:hasAssertion ?assertion .
   graph npa:graph { ?np dct:created ?date . }
   graph ?assertion {
@@ -23,6 +23,7 @@ select distinct ?community ?communityLabel ?question ?questionLabel ?sort ?resou
       filter (strstarts(str(?question), str(fip:)))
   }
   ?community fip:has-research-domain ?__domain_iri .
+  bind(replace(str(?np), '^.*(RA[a-zA-Z0-9-_]{4})[a-zA-Z0-9-_]{39}$', '$1') as ?npLabel)
   values ?rel {
     fip:declares-current-use-of fip:declares-planned-use-of fip:declares-planned-replacement-of
     # unofficial:
